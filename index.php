@@ -319,7 +319,7 @@ echo "</table>";
                 //Upload blob
                 $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
 
-                // List blobs.
+                /*// List blobs.
                 $listBlobsOptions = new ListBlobsOptions();
 
                 // echo "These are the blobs present in the container: ";
@@ -332,13 +332,13 @@ echo "</table>";
                         }
                     }
                     $listBlobsOptions->setContinuationToken($result->getContinuationToken());
-                } while($result->getContinuationToken());
+                } while($result->getContinuationToken());*/
                 // echo "<br />";
 
                 //echo $linkurl."<br />";
                 
                 echo '<script>window.alert("File Berhasil di Upload");location.href="index.php";</script>';
-                echo '<br><br>Image to analyze:<button onclick="processImage()">Analyze image</button>';
+                // echo '<br><br>Image to analyze:<button onclick="processImage()">Analyze image</button>';
                 
             }
             catch(ServiceException $e){
