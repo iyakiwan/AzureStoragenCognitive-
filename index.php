@@ -153,7 +153,7 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName='muftiwebapp';Ac
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
 $fileToUpload;
-$linkurl;
+$linkurl ="";
 
 
 if (isset($_GET["add"])) {
@@ -220,17 +220,18 @@ if (isset($_GET["add"])) {
             // echo "These are the blobs present in the container: ";
             do{
                 $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
-                foreach ($result->getBlobs() as $blob)
-                {
-                    //echo $blob->getName().": ".$blob->getUrl()."<br />";
-                    $linkurl = $blob->getUrl();
+                foreach ($result->getBlobs() as $blob){
+                    if($blob->getName() == $target_file) {
+                        $linkurl = $blob->getUrl();
+                        break;
+                    }
                 }
-            
                 $listBlobsOptions->setContinuationToken($result->getContinuationToken());
             } while($result->getContinuationToken());
             // echo "<br />";
 
             //echo $linkurl."<br />";
+            
             echo '<br><br>Image to analyze:<input type="text" name="inputImage" id="inputImage" value = "'.$linkurl.'" /><button onclick="processImage()">Analyze image</button>';
 
             
@@ -252,7 +253,7 @@ if (isset($_GET["add"])) {
             echo $code.": ".$error_message."<br />";
         }
     } else {
-        echo "Fila tidak dapat di upload !! (Ukuran file maximal 2MB)";
+        echo "File tidak bisa di upload";
     }
 }
 }
