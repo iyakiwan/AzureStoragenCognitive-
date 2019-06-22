@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 /**----------------------------------------------------------------------------------
 * Microsoft Developer & Platform Evangelism
 *
@@ -46,7 +46,9 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName='muftiwebapp';Ac
 // Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
-$fileToUpload = "HelloWorld.txt";
+
+
+// $fileToUpload = "HelloWorld.txt";
 
 /*if (!isset($_GET["Cleanup"])) {
     // Create container options object.
@@ -152,9 +154,61 @@ else
     }
 }
 */
+?> -->
+
+<html>
+<head>
+    <title>Mufti Azure Cloud</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            
+        }
+        h1 {
+            color : #000000;
+            text-align : center;
+            font-family: "SIMPSON";
+        }
+        form {
+            /*width: 300px;*/
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body >
+    <h1>Website Analisa Gambar</h1>
+    <p align="center">by Mufti Alie Satriawan</p>
+
+    <h2>Masukkan file gambarmu yang akan di analisa</h2>
+
+    <form method="post" action="index.php" enctype="multipart/form-data">
+        <table cellpadding="10px">
+            <tr>
+                <td>Upload File : </td>
+                <td><input name="uploadfile" type="file" accept="image/*" /></td>
+            </tr>    
+            <tr>
+                <td colspan="1" align="center"><input name="upload" type="submit" value="Upload Image" /></td>
+            </tr>
+        </table>
+        
+        <!-- <button type="submit">Press to clean up all resources created by this sample</button> -->
+    </form>
+
+
+
+</body>
+</html>
+<?php 
+if(isset($_POST["upload"])){
+
+    $photo= basename($_FILES ['uploadfile']['name']);
+    $photo_tmp= $_FILES ['uploadfile']['tmp_name'];
+    echo "Upload: " . $photo_tmp. "<br />";
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["uploadfile"]["name"]);
+    move_uploaded_file($photo_tmp, $target_file);
+}
 ?>
-
-
-<form method="post" action="phpQS.php?Cleanup&containerName=<?php echo $containerName; ?>">
-    <button type="submit">Press to clean up all resources created by this sample</button>
-</form>
