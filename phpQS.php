@@ -46,9 +46,9 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName='muftiwebapp';Ac
 // Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
-$fileToUpload = "HelloWorld.txt";
+$fileToUpload = "gilak.txt";
 
-/*if (!isset($_GET["Cleanup"])) {
+if (!isset($_GET["Cleanup"])) {
     // Create container options object.
     $createContainerOptions = new CreateContainerOptions();
 
@@ -79,7 +79,7 @@ $fileToUpload = "HelloWorld.txt";
         $blobClient->createContainer($containerName, $createContainerOptions);
 
         // Getting local file so that we can upload it to Azure
-        $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
+        $myfile = fopen($fileToUpload, "r") or die("Unable to open file!");
         fclose($myfile);
         
         # Upload file as a block blob
@@ -94,15 +94,17 @@ $fileToUpload = "HelloWorld.txt";
 
         // List blobs.
         $listBlobsOptions = new ListBlobsOptions();
-        $listBlobsOptions->setPrefix("HelloWorld");
+        //$listBlobsOptions->setPrefix("HelloWorld");
 
-        echo "These are the blobs present in the container: ";
+        echo "These are the blobs present in the container: <br />";
+        $linkurl;
 
         do{
             $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
             foreach ($result->getBlobs() as $blob)
             {
                 echo $blob->getName().": ".$blob->getUrl()."<br />";
+                $linkurl = $blob->getUrl();
             }
         
             $listBlobsOptions->setContinuationToken($result->getContinuationToken());
@@ -112,8 +114,11 @@ $fileToUpload = "HelloWorld.txt";
         // Get blob.
         echo "This is the content of the blob uploaded: ";
         $blob = $blobClient->getBlob($containerName, $fileToUpload);
+
         fpassthru($blob->getContentStream());
         echo "<br />";
+        echo $linkurl."<br />";
+        //echo fpassthru($blob->getContentStream());
     }
     catch(ServiceException $e){
         // Handle exception based on error codes and messages.
@@ -151,7 +156,7 @@ else
         echo $code.": ".$error_message."<br />";
     }
 }
-*/
+
 ?>
 
 

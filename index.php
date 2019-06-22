@@ -1,4 +1,49 @@
-<!-- <?php
+<html>
+<head>
+    <title>Mufti Azure Cloud</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            
+        }
+        h1 {
+            color : #000000;
+            text-align : center;
+            font-family: "SIMPSON";
+        }
+        form {
+            /*width: 300px;*/
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body >
+    <h1>Website Analisa Gambar</h1>
+    <p align="center">by Mufti Alie Satriawan</p>
+
+    <h2>Masukkan file gambarmu yang akan di analisa</h2>
+
+    <form method="post" action="index.php?add" enctype="multipart/form-data">
+        <table cellpadding="10px">
+            <tr>
+                <td>Upload File : </td>
+                <td><input name="uploadfile" type="file" accept="image/*" /></td>
+            </tr>    
+            <tr>
+                <td colspan="1" align="center"><input name="upload" type="submit" value="Upload Image" /></td>
+            </tr>
+        </table>
+        
+        <!-- <button type="submit">Press to clean up all resources created by this sample</button> -->
+    </form>
+
+
+
+</body>
+</html>
+<?php 
 /**----------------------------------------------------------------------------------
 * Microsoft Developer & Platform Evangelism
 *
@@ -46,11 +91,30 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName='muftiwebapp';Ac
 // Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
+$fileToUpload;
+$linkurl;
 
+if(isset($_POST["upload"])){
 
-// $fileToUpload = "HelloWorld.txt";
+    $photo= basename($_FILES ['uploadfile']['name']);
+    $photo_tmp= $_FILES ['uploadfile']['tmp_name'];
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["uploadfile"]["name"]);
+    if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
+        return;
+    }
+    if (move_uploaded_file($photo_tmp, $target_file)) {
+        echo "The file ". $photo. " has been uploaded.";
+        //echo '<img src="'.$target_file.'" width="400"/>';
+        $fileToUpload = $target_file;
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
 
-/*if (!isset($_GET["Cleanup"])) {
+if (isset($_GET["add"])) {
     // Create container options object.
     $createContainerOptions = new CreateContainerOptions();
 
@@ -81,13 +145,13 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
         $blobClient->createContainer($containerName, $createContainerOptions);
 
         // Getting local file so that we can upload it to Azure
-        $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
+        $myfile = fopen($fileToUpload, "r") or die("Unable to open file!");
         fclose($myfile);
         
         # Upload file as a block blob
-        echo "Uploading BlockBlob: ".PHP_EOL;
-        echo $fileToUpload;
-        echo "<br />";
+        // echo "Uploading BlockBlob: ".PHP_EOL;
+        // echo $fileToUpload;
+        // echo "<br />";
         
         $content = fopen($fileToUpload, "r");
 
@@ -96,26 +160,21 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 
         // List blobs.
         $listBlobsOptions = new ListBlobsOptions();
-        $listBlobsOptions->setPrefix("HelloWorld");
 
-        echo "These are the blobs present in the container: ";
-
+        // echo "These are the blobs present in the container: ";
         do{
             $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
             foreach ($result->getBlobs() as $blob)
             {
-                echo $blob->getName().": ".$blob->getUrl()."<br />";
+                //echo $blob->getName().": ".$blob->getUrl()."<br />";
+                $linkurl = $blob->getUrl();
             }
         
             $listBlobsOptions->setContinuationToken($result->getContinuationToken());
         } while($result->getContinuationToken());
-        echo "<br />";
+        // echo "<br />";
 
-        // Get blob.
-        echo "This is the content of the blob uploaded: ";
-        $blob = $blobClient->getBlob($containerName, $fileToUpload);
-        fpassthru($blob->getContentStream());
-        echo "<br />";
+        echo $linkurl."<br />";
     }
     catch(ServiceException $e){
         // Handle exception based on error codes and messages.
@@ -134,90 +193,4 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
         echo $code.": ".$error_message."<br />";
     }
 } 
-else 
-{
-
-    try{
-        // Delete container.
-        echo "Deleting Container".PHP_EOL;
-        echo $_GET["containerName"].PHP_EOL;
-        echo "<br />";
-        $blobClient->deleteContainer($_GET["containerName"]);
-    }
-    catch(ServiceException $e){
-        // Handle exception based on error codes and messages.
-        // Error codes and messages are here:
-        // http://msdn.microsoft.com/library/azure/dd179439.aspx
-        $code = $e->getCode();
-        $error_message = $e->getMessage();
-        echo $code.": ".$error_message."<br />";
-    }
-}
-*/
-?> -->
-
-<html>
-<head>
-    <title>Mufti Azure Cloud</title>
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-            
-        }
-        h1 {
-            color : #000000;
-            text-align : center;
-            font-family: "SIMPSON";
-        }
-        form {
-            /*width: 300px;*/
-            margin: 0 auto;
-        }
-    </style>
-</head>
-
-<body >
-    <h1>Website Analisa Gambar</h1>
-    <p align="center">by Mufti Alie Satriawan</p>
-
-    <h2>Masukkan file gambarmu yang akan di analisa</h2>
-
-    <form method="post" action="index.php" enctype="multipart/form-data">
-        <table cellpadding="10px">
-            <tr>
-                <td>Upload File : </td>
-                <td><input name="uploadfile" type="file" accept="image/*" /></td>
-            </tr>    
-            <tr>
-                <td colspan="1" align="center"><input name="upload" type="submit" value="Upload Image" /></td>
-            </tr>
-        </table>
-        
-        <!-- <button type="submit">Press to clean up all resources created by this sample</button> -->
-    </form>
-
-
-
-</body>
-</html>
-<?php 
-if(isset($_POST["upload"])){
-
-    $photo= basename($_FILES ['uploadfile']['name']);
-    $photo_tmp= $_FILES ['uploadfile']['tmp_name'];
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["uploadfile"]["name"]);
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-        return;
-    }
-    if (move_uploaded_file($photo_tmp, $target_file)) {
-        echo "The file ". $photo_tmp. " has been uploaded.";
-        echo '<img src="'.$target_file.'" width="400"/>';
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-    }
-}
-?>
+?> 
