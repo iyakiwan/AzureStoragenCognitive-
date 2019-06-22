@@ -215,6 +215,7 @@ if(isset($_POST["upload"])){
     }
     if (move_uploaded_file($photo_tmp, $target_file)) {
         echo "The file ". $photo_tmp. " has been uploaded.";
+        echo '<img src="'.$target_file.'" width="400"/>';
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
