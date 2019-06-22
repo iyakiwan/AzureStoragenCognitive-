@@ -20,7 +20,7 @@
     </style>
 </head>
 
-<body >
+<body>
 <script type="text/javascript">
     function processImage() {
         // **********************************************
@@ -84,6 +84,7 @@
         });
     };
 </script>
+
     <h1>Website Analisa Gambar</h1>
     <p align="center">by Mufti Alie Satriawan</p>
 
@@ -253,6 +254,7 @@ if (isset($_GET["add"])) {
     } else {
         echo "Fila tidak dapat di upload !! (Ukuran file maximal 2MB)";
     }
+}
 }
 ?> 
 
