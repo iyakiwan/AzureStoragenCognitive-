@@ -206,9 +206,17 @@ if(isset($_POST["upload"])){
 
     $photo= basename($_FILES ['uploadfile']['name']);
     $photo_tmp= $_FILES ['uploadfile']['tmp_name'];
-    echo "Upload: " . $photo_tmp. "<br />";
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($_FILES["uploadfile"]["name"]);
-    move_uploaded_file($photo_tmp, $target_file);
+    if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
+        return;
+    }
+    if (move_uploaded_file($photo_tmp, $target_file)) {
+        echo "The file ". $photo_tmp. " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
 }
 ?>
