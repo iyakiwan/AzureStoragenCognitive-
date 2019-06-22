@@ -2,6 +2,7 @@
 <head>
     <title>Mufti Azure Cloud</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link rel="icon" href="uploads/logo.jpg">
     <style type="text/css">
         body {
             margin: 0;
